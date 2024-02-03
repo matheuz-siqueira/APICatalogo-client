@@ -1,0 +1,40 @@
+@model APICatalogo_client.Models.CategoryViewModel
+<h2>Criar Categoria</h2>
+
+<form asp-action="NewCategory">
+    <div class="form-horizontal">
+        <hr>
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Name" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Name" class="form-control">
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ImageUrl" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="ImageUrl" class="form-control">
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group" style="padding-top: 10px">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Criar" class="btn btn-success">
+                <a asp-action="Index" class="btn btn-info">Retornar</a>
+            </div>
+
+        </div>
+    </div>
+
+    @if(ViewBag.Erro is not null)
+    {
+        <div style="color:red">
+            <h4>@ViewBag.Erro</h4>
+        </div>
+    }
+
+</form>
