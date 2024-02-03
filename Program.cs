@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using APICatalogo_client.Services;
 using APICatalogo_client.Services.Contracts;
 
@@ -10,7 +11,16 @@ builder.Services.AddHttpClient("CategoriesAPI", c =>
     c.BaseAddress = new Uri(builder.Configuration["ServiceUri:APICatalogo"]);
 });
 
+builder.Services.AddHttpClient("AuthenticationAPI", c=> 
+{
+    c.BaseAddress = new Uri(builder.Configuration["ServiceUri:APICatalogo"]); 
+    c.DefaultRequestHeaders.Accept.Clear();
+    c.DefaultRequestHeaders.Accept.Add(
+            new MediaTypeWithQualityHeaderValue("application/json"));
+});
+
 builder.Services.AddScoped<ICategoryService, CategoryService>(); 
+builder.Services.AddScoped<IAuthenticateService, AuthenticateService>(); 
 
 var app = builder.Build();
 
