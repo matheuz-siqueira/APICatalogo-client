@@ -11,6 +11,11 @@ builder.Services.AddHttpClient("CategoriesAPI", c =>
     c.BaseAddress = new Uri(builder.Configuration["ServiceUri:APICatalogo"]);
 });
 
+builder.Services.AddHttpClient("ProductsAPI", c => 
+{
+    c.BaseAddress = new Uri(builder.Configuration["ServiceUri:APICatalogo"]);
+});
+
 builder.Services.AddHttpClient("AuthenticationAPI", c=> 
 {
     c.BaseAddress = new Uri(builder.Configuration["ServiceUri:APICatalogo"]); 
@@ -21,6 +26,7 @@ builder.Services.AddHttpClient("AuthenticationAPI", c=>
 
 builder.Services.AddScoped<ICategoryService, CategoryService>(); 
 builder.Services.AddScoped<IAuthenticateService, AuthenticateService>(); 
+builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
 

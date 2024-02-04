@@ -58,7 +58,7 @@ public class CategoryService : ICategoryService
     {
         var client = _httpClientFactory.CreateClient("CategoriesAPI"); 
         var category = JsonSerializer.Serialize(model); 
-        StringContent content = new StringContent(category, Encoding.UTF8, "application/json");
+        StringContent content = new(category, Encoding.UTF8, "application/json");
         using var response = await client.PostAsync(apiEndpoint, content);
         if(response.IsSuccessStatusCode)
         {

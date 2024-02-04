@@ -1,0 +1,50 @@
+@model IEnumerable<APICatalogo_client.Models.ProductViewModel> 
+
+<h2>Produtos</h2> 
+<hr>
+<div class="row">
+    <div class="col-md-12">
+        <div>
+            <div class="pull-left">
+                <a asp-action="NewProduct" class="btn btn-primary">
+                    <span title="Criar Produto" class="fas fa-plus"></span> Novo Produto 
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<div class="panel panel-default">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Name)</th>
+                <th>@Html.DisplayNameFor(model => model.Description)</th>
+                <th>@Html.DisplayNameFor(model => model.Price)</th>
+                <th>@Html.DisplayNameFor(model => model.ImageUrl)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ImageUrl)</td>
+                    <td>
+                        <a asp-action="UpdateProduct" asp-route-id="@item.Id" title="Editar" class="btn btn-warning">
+                            <span class="fas fa-edit"></span>
+                        </a>
+                        <a asp-action="DeleteProduct" asp-route-id="@item.Id" title="Deletar" class="btn btn-danger">
+                            <span class="fas fa-trash-alt"></span>
+                        </a>
+                        <a asp-action="Details" asp-route-id="@item.Id" title="Details" class="btn btn-info">
+                            <span class="fas fa-check"></span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
