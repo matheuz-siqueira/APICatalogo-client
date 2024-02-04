@@ -7,6 +7,7 @@ namespace APICatalogo_client.Controllers;
 public class CategoryController : Controller
 {
     private readonly ICategoryService _service;
+    private string token = string.Empty; 
     public CategoryController(ICategoryService service)
     {
         _service = service;
@@ -14,7 +15,7 @@ public class CategoryController : Controller
 
     public async Task<ActionResult<IEnumerable<CategoryViewModel>>> Index()
     {
-        var result = await _service.GetAll();
+        var result = await _service.GetAll(GetToken());
         if(result is null)
             return View("Error");
 
@@ -33,7 +34,7 @@ public class CategoryController : Controller
     {
         if(ModelState.IsValid)
         {
-            var result = await _service.Create(model);
+            var result = await _service.Create(model, GetToken());
             if(result is not null)
                 return RedirectToAction(nameof(Index));
         }
@@ -44,7 +45,7 @@ public class CategoryController : Controller
     [HttpGet]
     public async Task<IActionResult> UpdateCategory(int id)
     {
-        var result = await _service.GetById(id); 
+        var result = await _service.GetById(id, GetToken()); 
         if(result is null)
             return View("Error"); 
         return View(result);
@@ -56,7 +57,7 @@ public class CategoryController : Controller
     {
         if(ModelState.IsValid)
         {
-            var result = await _service.Update(id, model);  
+            var result = await _service.Update(id, model, GetToken());  
             if(result)
                 return RedirectToAction(nameof(Index)); 
         }
@@ -67,7 +68,7 @@ public class CategoryController : Controller
     [HttpGet]
     public async Task<IActionResult> DeleteCategory(int id)
     {
-        var result = await _service.GetById(id); 
+        var result = await _service.GetById(id, GetToken()); 
         if(result is null)
             return View("Error"); 
         return View(result) ;
@@ -76,11 +77,18 @@ public class CategoryController : Controller
     [HttpPost(), ActionName("DeleteCategory")]
     public async Task<ActionResult<CategoryViewModel>> DeleteConfirmed(int id)
     {
-        var result = await _service.Remove(id);
+        var result = await _service.Remove(id, GetToken());
         if(result)
             return RedirectToAction(nameof(Index));
         return View("Error");
 
+    }
+
+    private string GetToken()
+    {
+        if(HttpContext.Request.Cookies.ContainsKey("X-Access-Token"))
+            token =  HttpContext.Request.Cookies["X-Access-Token"].ToString();
+        return token; 
     }
 
 

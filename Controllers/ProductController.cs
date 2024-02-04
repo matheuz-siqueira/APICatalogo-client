@@ -30,7 +30,7 @@ public class ProductController : Controller
     public async Task<IActionResult> NewProduct()
     {
         ViewBag.CategoryId = new 
-            SelectList(await _categoryService.GetAll(), "Id", "Name");
+            SelectList(await _categoryService.GetAll(GetToken()), "Id", "Name");
         return View();
     }   
 
@@ -47,7 +47,7 @@ public class ProductController : Controller
         else 
         {
             ViewBag.CategoryId = 
-                new SelectList(await _categoryService.GetAll(), "Id", "Name");
+                new SelectList(await _categoryService.GetAll(GetToken()), "Id", "Name");
         }
         return View(model);
     }
@@ -69,7 +69,7 @@ public class ProductController : Controller
             return View("Erro");
 
         ViewBag.CategoryId = new 
-            SelectList(await _categoryService.GetAll(), "Id", "Name"); 
+            SelectList(await _categoryService.GetAll(GetToken()), "Id", "Name"); 
         return View(result);
     }
 

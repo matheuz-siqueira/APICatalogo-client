@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using APICatalogo_client.Models;
@@ -19,9 +20,10 @@ public class CategoryService : ICategoryService
         _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true }; 
     }
 
-    public async Task<IEnumerable<CategoryViewModel>> GetAll()
+    public async Task<IEnumerable<CategoryViewModel>> GetAll(string token)
     {
         var client = _httpClientFactory.CreateClient("CategoriesAPI");
+        PutTokenInHeaderAuthorization(client, token); 
         using var response = await client.GetAsync(apiEndpoint);
         if(response.IsSuccessStatusCode)
         {   
@@ -37,9 +39,10 @@ public class CategoryService : ICategoryService
         return models;
     }
 
-    public async Task<CategoryViewModel> GetById(int id)
+    public async Task<CategoryViewModel> GetById(int id, string token)
     {
         var client = _httpClientFactory.CreateClient("CategoriesAPI");
+        PutTokenInHeaderAuthorization(client, token);
         using var response = await client.GetAsync(apiEndpoint + id);
         if(response.IsSuccessStatusCode)
         {
@@ -54,9 +57,10 @@ public class CategoryService : ICategoryService
         return model; 
 
     }
-    public async Task<CategoryViewModel> Create(CategoryViewModel model)
+    public async Task<CategoryViewModel> Create(CategoryViewModel model, string token)
     {
-        var client = _httpClientFactory.CreateClient("CategoriesAPI"); 
+        var client = _httpClientFactory.CreateClient("CategoriesAPI");
+        PutTokenInHeaderAuthorization(client, token);  
         var category = JsonSerializer.Serialize(model); 
         StringContent content = new(category, Encoding.UTF8, "application/json");
         using var response = await client.PostAsync(apiEndpoint, content);
@@ -72,22 +76,30 @@ public class CategoryService : ICategoryService
         }
         return model;
     }
-    public async Task<bool> Update(int id, CategoryViewModel model)
+    public async Task<bool> Update(int id, CategoryViewModel model, string token)
     {
         var client = _httpClientFactory.CreateClient("CategoriesAPI");
+        PutTokenInHeaderAuthorization(client, token); 
         using var response = await client.PutAsJsonAsync(apiEndpoint + id, model); 
         if(response.IsSuccessStatusCode)
             return true; 
         else 
             return false; 
     }
-    public async Task<bool> Remove(int id)
+    public async Task<bool> Remove(int id, string token)
     {
         var client = _httpClientFactory.CreateClient("CategoriesAPI"); 
+        PutTokenInHeaderAuthorization(client, token); 
         using var response = await client.DeleteAsync(apiEndpoint + id); 
         if(response.IsSuccessStatusCode)
             return true; 
         else 
             return false; 
+    }
+
+    private static void PutTokenInHeaderAuthorization(HttpClient client, string token)
+    {
+        client.DefaultRequestHeaders.Authorization = new 
+            AuthenticationHeaderValue("Bearer",token); 
     }
 }
